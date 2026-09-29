@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Norsk Quiz – I eller På?</title>
+
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  background: #eaf0ff;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+#quiz {
+  max-width: 600px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#question {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 30px 0;
+}
+
+.answer {
+  width: 45%;
+  margin: 8px;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: #4d6cff;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.answer:hover {
+  background: #344fd1;
+}
+
+#message {
+  min-height: 35px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#score {
+  font-size: 18px;
+}
+
+#nextButton,
+#restartButton {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  background: #222;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+#nextButton {
+  display: none;
+}
+
+#restartButton {
+  display: none;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<h1>🇳🇴 Norsk Quiz</h1>
+
+<p>Øv på <strong>i</strong> eller <strong>på</strong>!</p>
+
+<div id="quiz">
+
+  <p id="score">Poeng: 0 / 10</p>
+
+  <div id="question"></div>
+
+  <button class="answer"
+  onclick="checkAnswer('i')">
+  I
+  </button>
+
+  <button class="answer"
+  onclick="checkAnswer('på')">
+  PÅ
+  </button>
+
+  <div id="message"></div>
+
+  <button id="nextButton"
+  onclick="nextQuestion()">
+  Neste →
+  </button>
+
+  <button id="restartButton"
+  onclick="startQuiz()">
+  🔄 Spill igjen
+  </button>
+
+</div>
+
+
+<script>
+
+const questions = [
+
+  {
+    sentence: "Jeg bor ___ Norge.",
+    answer: "i"
+  },
+
+  {
+    sentence: "Jeg er ___ skolen.",
+    answer: "på"
+  },
+
+  {
+    sentence: "Hun bor ___ Oslo.",
+    answer: "i"
+  },
+
+  {
+    sentence: "Vi er ___ jobb.",
+    answer: "på"
+  },
+
+  {
+    sentence: "Jeg er ___ kjøkkenet.",
+    answer: "på"
+  },
+
+  {
+    sentence: "Han bor ___ Kristiansund.",
+    answer: "i"
+  },
+
+  {
+    sentence: "Barna er ___ skolen.",
+    answer: "på"
+  },
+
+  {
+    sentence: "Jeg sitter ___ bussen.",
+    answer: "på"
+  },
+
+  {
+    sentence: "Hun er ___ Norge.",
+    answer: "i"
+  },
+
+  {
+    sentence: "Vi er ___ butikken.",
+    answer: "i"
+  }
+
+];
+
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+
+function startQuiz() {
+
+  currentQuestion = 0;
+  score = 0;
+  answered = false;
+
+  document.getElementById("restartButton").style.display = "none";
+
+  document.getElementById("nextButton").style.display = "none";
+
+  document.querySelectorAll(".answer").forEach(button => {
+    button.style.display = "inline-block";
+  });
+
+  showQuestion();
+
+}
+
+
+function showQuestion() {
+
+  answered = false;
+
+  document.getElementById("message").textContent = "";
+
+  document.getElementById("nextButton").style.display = "none";
+
+  const question = questions[currentQuestion];
+
+  document.getElementById("question").textContent =
+    question.sentence;
+
+  document.getElementById("score").textContent =
+    "Poeng: " + score + " / " + questions.length;
+
+}
+
+
+function checkAnswer(answer) {
+
+  if (answered) return;
+
+  answered = true;
+
+  const correctAnswer =
+    questions[currentQuestion].answer;
+
+  if (answer === correctAnswer) {
+
+    score++;
+
+    document.getElementById("message").textContent =
+      "✅ Riktig! Bra jobbet!";
+
+  } else {
+
+    document.getElementById("message").textContent =
+      "❌ Ikke helt. Riktig svar er: " +
+      correctAnswer.toUpperCase();
+
+  }
+
+  document.getElementById("score").textContent =
+    "Poeng: " + score + " / " + questions.length;
+
+  document.getElementById("nextButton").style.display =
+    "inline-block";
+
+}
+
+
+function nextQuestion() {
+
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+
+    showQuestion();
+
+  } else {
+
+    finishQuiz();
+
+  }
+
+}
+
+
+function finishQuiz() {
+
+  document.getElementById("question").textContent =
+    "🎉 Quiz ferdig!";
+
+  document.getElementById("message").textContent =
+    "Du fikk " + score + " av " +
+    questions.length + " riktige!";
+
+  document.getElementById("nextButton").style.display =
+    "none";
+
+  document.querySelectorAll(".answer").forEach(button => {
+    button.style.display = "none";
+  });
+
+  document.getElementById("restartButton").style.display =
+    "inline-block";
+
+}
+
+
+startQuiz();
+
+</script>
+
+</body>
+
+</html>
